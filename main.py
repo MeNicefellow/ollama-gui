@@ -6,7 +6,7 @@ import json
 class OllamaGUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("Ollama Manager")
+        self.root.title("Ollama Model Manager")
         
         # Create main frame
         main_frame = ttk.Frame(root, padding="10")

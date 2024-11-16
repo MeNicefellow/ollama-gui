@@ -1,8 +1,8 @@
-# Ollama GUI Manager
+# Ollama Model Manager
 
 A simple graphical user interface for managing Ollama models. This tool provides a user-friendly way to view, start, and stop Ollama models without using the command line.
 
-![Ollama GUI Manager Screenshot](screenshot.png)
+![Ollama Model Manager Screenshot](screenshot.png)
 
 ## Features
 
