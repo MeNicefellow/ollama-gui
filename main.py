@@ -19,7 +19,7 @@ class OllamaGUI:
         running_frame = ttk.LabelFrame(main_frame, text="Running Models", padding="5")
         running_frame.grid(row=0, column=1, padx=5, pady=5, sticky=(tk.W, tk.E, tk.N, tk.S))
         
-        # Create treeviews
+        # Create treeviews (now at row 0)
         self.available_tree = ttk.Treeview(available_frame, columns=('Name', 'Size'), show='headings')
         self.available_tree.heading('Name', text='Name')
         self.available_tree.heading('Size', text='Size')
@@ -30,7 +30,7 @@ class OllamaGUI:
         self.running_tree.heading('Processor', text='Processor')
         self.running_tree.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
         
-        # Add scrollbars
+        # Add scrollbars (at row 0)
         available_scroll = ttk.Scrollbar(available_frame, orient=tk.VERTICAL, command=self.available_tree.yview)
         available_scroll.grid(row=0, column=1, sticky=(tk.N, tk.S))
         self.available_tree.configure(yscrollcommand=available_scroll.set)
@@ -39,9 +39,9 @@ class OllamaGUI:
         running_scroll.grid(row=0, column=1, sticky=(tk.N, tk.S))
         self.running_tree.configure(yscrollcommand=running_scroll.set)
         
-        # Bind double-click events
-        self.available_tree.bind('<Double-1>', self.run_model)
-        self.running_tree.bind('<Double-1>', self.stop_model)
+        # Add instruction labels below treeviews
+        ttk.Label(available_frame, text="Double-click to start a model").grid(row=1, column=0, sticky=tk.W)
+        ttk.Label(running_frame, text="Double-click to stop a model").grid(row=1, column=0, sticky=tk.W)
         
         # Refresh button
         refresh_btn = ttk.Button(main_frame, text="Refresh", command=self.refresh_lists)
@@ -55,6 +55,10 @@ class OllamaGUI:
         main_frame.columnconfigure(1, weight=1)
         available_frame.columnconfigure(0, weight=1)
         running_frame.columnconfigure(0, weight=1)
+
+        # Bind double-click events
+        self.available_tree.bind("<Double-1>", self.run_model)
+        self.running_tree.bind("<Double-1>", self.stop_model)
 
     def get_available_models(self):
         try:
