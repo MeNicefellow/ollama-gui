@@ -25,8 +25,9 @@ class OllamaGUI:
         self.available_tree.heading('Size', text='Size')
         self.available_tree.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
         
-        self.running_tree = ttk.Treeview(running_frame, columns=('Name', 'Processor'), show='headings')
+        self.running_tree = ttk.Treeview(running_frame, columns=('Name', 'Size', 'Processor'), show='headings')
         self.running_tree.heading('Name', text='Name')
+        self.running_tree.heading('Size', text='Size')
         self.running_tree.heading('Processor', text='Processor')
         self.running_tree.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
         
@@ -68,7 +69,9 @@ class OllamaGUI:
             for line in lines:
                 if line.strip():
                     parts = line.split()
-                    models.append((parts[0], parts[3] + ' ' + parts[4]))
+                    name = parts[0]
+                    size = parts[2] + ' ' + parts[3]
+                    models.append((name, size))
             return models
         except Exception as e:
             messagebox.showerror("Error", f"Failed to get available models: {str(e)}")
@@ -82,7 +85,10 @@ class OllamaGUI:
             for line in lines:
                 if line.strip():
                     parts = line.split()
-                    models.append((parts[0], parts[3] + ' ' + parts[4]))
+                    name = parts[0]
+                    size = parts[2] + ' ' + parts[3]
+                    processor = parts[4] + ' ' + parts[5]
+                    models.append((name, size, processor))
             return models
         except Exception as e:
             messagebox.showerror("Error", f"Failed to get running models: {str(e)}")
