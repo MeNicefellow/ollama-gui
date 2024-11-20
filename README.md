@@ -13,11 +13,32 @@ A simple graphical user interface for managing Ollama models. This tool provides
 - Easy-to-use refresh functionality
 - Confirmation dialogs for model operations
 
+
+
+## System Tray Integration
+
+The Ollama Model Manager now includes system tray functionality for a better desktop experience:
+
+- The application runs with both a window interface and a system tray icon (circular 'O' symbol)
+- When you close the window (X button), the application minimizes to the system tray instead of quitting
+- You can access the application in three ways while it's minimized:
+  1. Click the system tray icon to show the window
+  2. Right-click the system tray icon and select "Show"
+  3. Right-click the system tray icon and select "Exit" to completely close the application
+
+This allows you to keep the Ollama Model Manager running in the background while maintaining easy access to its controls.
+
+
+Note: The system tray integration is currently optimized for Windows. Additional configurations might be needed for other operating systems.
+
+
 ## Prerequisites
 
 - Python 3.x
 - Tkinter (usually comes with Python)
 - [Ollama](https://ollama.ai/) installed and accessible from command line
+- pystray
+
 
 ## Installation
 

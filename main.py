@@ -2,11 +2,25 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import subprocess
 import json
+import pystray
+from PIL import Image
+import sys
+
+# Only import Windows-specific modules if on Windows
+if sys.platform.startswith('win'):
+    import win32gui
+    import win32con
 
 class OllamaGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("Ollama Model Manager")
+        
+        # Add window state tracking
+        self.root.protocol('WM_DELETE_WINDOW', self.hide_window)
+        
+        # Create system tray icon
+        self.create_tray_icon()
         
         # Create main frame
         main_frame = ttk.Frame(root, padding="10")
@@ -133,7 +147,54 @@ class OllamaGUI:
             except Exception as e:
                 messagebox.showerror("Error", f"Failed to stop model: {str(e)}")
 
+    # Add new methods for tray icon functionality
+    def create_tray_icon(self):
+        # Create a white background image
+        icon_size = 64
+        icon_image = Image.new('RGB', (icon_size, icon_size), color='white')
+        
+        # Create a circular 'O'
+        from PIL import ImageDraw
+        draw = ImageDraw.Draw(icon_image)
+        padding = 4
+        draw.ellipse([padding, padding, icon_size-padding, icon_size-padding], 
+                     outline='black', width=3, fill=None)
+        
+        menu = (
+            pystray.MenuItem("Show", self.show_window),
+            pystray.MenuItem("Exit", self.quit_application)
+        )
+        self.icon = pystray.Icon("Ollama Manager", icon_image, "Ollama Manager", menu)
+        
+        def setup(icon):
+            icon.visible = True
+            icon.on_click = self.show_window  # This will handle left clicks
+            
+        self.icon.run_detached(setup=setup)
+
+    def show_window(self, icon=None, item=None):
+        self.icon.stop()
+        self.root.after(0, self._show_window)
+        self.create_tray_icon()
+
+    def _show_window(self):
+        self.root.deiconify()
+        self.root.lift()
+        self.root.focus_force()
+
+    def hide_window(self):
+        self.root.withdraw()
+
+    def quit_application(self, icon=None, item=None):
+        self.icon.stop()
+        self.root.quit()
+
 if __name__ == "__main__":
+    # Hide console window only on Windows
+    if sys.platform.startswith('win'):
+        console_window = win32gui.GetForegroundWindow()
+        win32gui.ShowWindow(console_window, win32con.SW_HIDE)
+    
     root = tk.Tk()
     app = OllamaGUI(root)
     root.mainloop()
